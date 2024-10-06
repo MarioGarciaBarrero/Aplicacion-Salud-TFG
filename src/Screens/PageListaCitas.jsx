@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView  } from 'react-native'
-import { getDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
 const PageListaCitas = ({ route, navigation }) => {
 
@@ -24,7 +24,7 @@ const PageListaCitas = ({ route, navigation }) => {
     const handlePress = (centro) => {
         // Aquí puedes manejar la acción al pulsar el botón
         console.log(centro.type);
-        if(centro.type == 'Hospital' || centro.type == 'Centro de salud'){
+        if(centro.type == 'Hospital' || centro.type == 'Centro de Salud'){
           navigation.navigate('Areas', { centro });
         }else{
           navigation.navigate('Citas', { areaSeleccionada: null, centroSeleccionado: centro});

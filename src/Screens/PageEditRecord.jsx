@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, ScrollView, StyleSheet, Alert, TouchableOpacity, TextInput } from 'react-native';
-import { getDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
 export default function PageEditRecord({ route, navigation }) {
     const { type } = route.params; // Recibimos el tipo de entidad (Centros, Areas, Usuarios, Noticias)

@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { getDataSQL, getDataSQLShowResult } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { getDataSQL, getDataSQLShowResult } from '../Components/SQLiteComponent.jsx';
 import moment from 'moment'; // Para manipular fechas
-import { AuthContext } from './AuthContext'
+import { AuthContext } from '../Components/AuthContext'
 
 const PageSeleccionCita = ({ route, navigation }) => {
   const { userId } = useContext(AuthContext);
   const { areaSeleccionada, centroSeleccionado } = route.params;
   const [centroArea, setCentroAreas] = useState([]);
   const [fechas, setFechas] = useState([]);
-  const [horas, setHoras] = useState([]);
   
   const today = moment().format('YYYY-MM-DD');
   const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
@@ -105,8 +104,6 @@ const PageSeleccionCita = ({ route, navigation }) => {
         const fechas = await getDataSQL('SELECT * FROM Dia');
         setFechas(fechas);
 
-        const horas = await getDataSQL('SELECT * FROM Horario');
-        setHoras(horas);
       } catch (error) {
         console.error('Error fetching data:', error);
       }   

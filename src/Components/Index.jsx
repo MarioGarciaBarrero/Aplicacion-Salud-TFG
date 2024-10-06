@@ -2,21 +2,21 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import Main from './Main';
-import PageListaCitas from './PageListaCitas';  
-import PageAreas from './PageAreas';
-import PageSeleccionCita from './PageSeleccionCita';
-import LoginRegister from './LogInRegister';
-import PageProfile from './PageProfile';
-import PageMisCitas from './PageMisCitas';
-import PageHistorial from './PageHistorial';
-import PageNoticias from './PageNoticias';
-import PageNoticiaDetallada from './PageNoticiaDetallada';
-import EditHomePage from './EditHomePage';
-import AddRecord from './PageAddRecord';
-import EditRecord from './PageEditRecord';
-import EditRecordDetailPage from './EditRecordDetailPage';
-import PageDeleteRecord from './PageDeleteRecord';
+import Main from '../Screens/Main';
+import PageListaCitas from '../Screens/PageListaCitas';  
+import PageAreas from '../Screens/PageAreas';
+import PageSeleccionCita from '../Screens/PageSeleccionCita';
+import LoginRegister from '../Screens/LogInRegister';
+import PageProfile from '../Screens/PageProfile';
+import PageMisCitas from '../Screens/PageMisCitas';
+import PageHistorial from '../Screens/PageHistorial';
+import PageNoticias from '../Screens/PageNoticias';
+import PageNoticiaDetallada from '../Screens/PageNoticiaDetallada';
+import EditHomePage from '../Screens/EditHomePage';
+import AddRecord from '../Screens/PageAddRecord';
+import EditRecord from '../Screens/PageEditRecord';
+import EditRecordDetailPage from '../Screens/EditRecordDetailPage';
+import PageDeleteRecord from '../Screens/PageDeleteRecord';
 
 const Stack = createNativeStackNavigator();
 

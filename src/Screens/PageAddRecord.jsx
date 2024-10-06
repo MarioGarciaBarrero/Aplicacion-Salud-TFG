@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import bcrypt from 'react-native-bcrypt';
-import { insertDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { insertDataSQL } from '../Components/SQLiteComponent.jsx';
 
 export default function PageAddRecord({ navigation, route }) {
   const { type } = route.params; // Recibimos el tipo de entidad (Centros, Areas, Usuarios, Noticias)

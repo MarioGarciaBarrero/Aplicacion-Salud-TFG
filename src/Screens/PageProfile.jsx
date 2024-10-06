@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { AuthContext } from './AuthContext'; // Asumiendo que el AuthContext está bien implementado
-import { getDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { AuthContext } from '../Components/AuthContext'; // Asumiendo que el AuthContext está bien implementado
+import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
 const PageProfile = () => {
   const { userId } = useContext(AuthContext); // Obtener el id del usuario del contexto

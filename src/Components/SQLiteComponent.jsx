@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+import bcrypt from 'react-native-bcrypt';
 
 // Abrir la base de datos (si no existe, se crea automáticamente)
 const db = SQLite.openDatabaseSync('SaludPublicaBBDD.db');
@@ -36,13 +37,14 @@ export const insertDataSQL = async (sqlQuery, params = []) => {
 
 
 //INSERTAR Centros
-//db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado) VALUES (?,?,?,?,?,?)', 'Farmacia Mostoles', 'Horario: 9:00-23:00', '40.328612797903034', '-3.870639229967378', 'Farmacia', false);
+//db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaParada, horaVuelta, horaInicio, horaFin) VALUES (?,?,?,?,?,?)', 'Farmacia Mostoles', 'Horario: 9:00-23:00', '40.328612797903034', '-3.870639229967378', 'Farmacia', false);
 
 //AÑADIR NUEVOS CAMPOS A UNA TABLA
 //db.runAsync('ALTER TABLE Centros ADD COLUMN duracionCita INT');
 
 //ACTUALIZAR TABLA
 // db.runAsync('UPDATE Usuario SET password = ? WHERE id = 2', '$2a$10$BHMLv.GYsS5hhBK0o9slHOPFbXdDRYfn8sGRltID.wRP3xsYBDUoW');
+// db.runAsync('UPDATE Usuario SET admin = ? WHERE id = 1', false);
 // db.runAsync('UPDATE Area SET name = ? WHERE Id = 1', 'Consulta General');
 // getDataSQLShowResult('SELECT id, horaInicio, horaFin, horaParada, horaVuelta, duracionCita FROM Centros WHERE Type !=?', 'Farmacia');
 // db.runAsync('UPDATE Centros SET horaInicio = ?, horaFin = ?, horaParada = ?, horaVuelta = ?, duracionCita = ? WHERE Id = 41', '09:00:00', '22:00:00', '14:00:00', '17:00:00', 60);
@@ -50,9 +52,10 @@ export const insertDataSQL = async (sqlQuery, params = []) => {
 //BORRAR REGISTROS DE UNA TABLA
 // db.runAsync('DELETE FROM Usuario WHERE id = 4');
 
-getDataSQLShowResult('SELECT * FROM Usuario');
+// getDataSQLShowResult('SELECT * FROM Usuario');
 
 //INSERTAR TABLAS
+// db.runAsync('CREATE TABLE Centros (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, latitude VARCHAR(255) NOT NULL, longitude VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, privado BOOLEAN NOT NULL, duracionCita INTEGER NOT NULL, horaParada TIME, horaVuelta TIME, horaInicio TIME NOT NULL, horaFin TIME NOT NULL)');
 // db.runAsync('CREATE TABLE Usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, telefono VARCHAR(15), fechaNacimiento DATE, admin BOOLEAN DEFAULT false)');
 // db.runAsync('CREATE TABLE Area (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL, centro_id INT, FOREIGN KEY (centro_id) REFERENCES Centros(id))');
 // db.runAsync('CREATE TABLE Dia (id INTEGER PRIMARY KEY AUTOINCREMENT, date DATE NOT NULL, festivo BOOLEAN NOT NULL)');
@@ -65,9 +68,9 @@ getDataSQLShowResult('SELECT * FROM Usuario');
 // db.runAsync('CREATE TABLE Resultados (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaResultado DATE NOT NULL, tipoPrueba TEXT NOT NULL, resultado TEXT NOT NULL)');
 // db.runAsync('CREATE TABLE EnfermedadesCronicas (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaDescubrimiento DATE NOT NULL, enfermedad TEXT NOT NULL)');
 
-//db.runAsync('CREATE TABLE NoticiasSalud (id INTEGER PRIMARY KEY AUTOINCREMENT, Titulo TEXT NOT NULL, Noticia TEXT NOT NULL, FechaPublicacion DATE NOT NULL, EdadesObjetivo TEXT NOT NULL)');
+// db.runAsync('CREATE TABLE NoticiasSalud (id INTEGER PRIMARY KEY AUTOINCREMENT, Titulo TEXT NOT NULL, Noticia TEXT NOT NULL, FechaPublicacion DATE NOT NULL, EdadesObjetivo TEXT NOT NULL)');
 
-//db.runAsync('DROP TABLE EnfermedadesCronicas');
+// db.runAsync('DROP TABLE Centros');
 
 // db.runAsync('ALTER TABLE Usuario ADD COLUMN fechaNacimiento DATE');
 
@@ -82,12 +85,12 @@ getDataSQLShowResult('SELECT * FROM Usuario');
 
 //INSERTAR AREAS
 // db.runAsync('DELETE FROM Area WHERE centro_id = 3');
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Consulta general', 1);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Pediatría', 1);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Ginecología', 1);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Radiología', 1);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Rehabilitación', 1);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Psiquiatría', 1);
+// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Consulta general', 3);
+// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Pediatría', 3);
+// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Ginecología', 3);
+// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Radiología', 3);
+// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Rehabilitación', 3);
+// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Psiquiatría', 3);
 
 // db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Medicina de Familia', 4);
 // db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Enfermería', 4);
@@ -99,18 +102,14 @@ getDataSQLShowResult('SELECT * FROM Usuario');
 // db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Enfermería', 10);
 // db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Medicina de Familia', 11);
 // db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Enfermería', 11);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Medicina de Familia', 12);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Enfermería', 12);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Medicina de Familia', 13);
-// db.runAsync('INSERT INTO Area (name, centro_id) VALUES (?,?)', 'Enfermería', 13);
+
 //getDataSQLShowResult('SELECT * FROM Area');
 
 
 //INSERTAR USUARIOS
-// db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Mario', 'García Barrero', 'm.garciaba.2019@alumnos.urjc.es', '1234', '616879471', false);
-// db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Admin', 'Test', 'admin@admin.com', '1234', '123456789', true);
-//getDataSQLShowResult('SELECT * FROM Usuario');
-
+//db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Mario', 'García Barrero', 'm.garciaba.2019@alumnos.urjc.es', '1234', '616879471', false);
+//db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Admin', 'Test', 'admin', '1234', '123456789', true);
+getDataSQLShowResult('SELECT * FROM Usuario');
 
 // INSERTAR DIAS
 // db.runAsync('INSERT INTO Dia (date, festivo) VALUES (?,?)', ('2024-10-01'), 0);
@@ -267,4 +266,34 @@ getDataSQLShowResult('SELECT * FROM Usuario');
 
 // INSERTAR NOTICIAS
 // db.runAsync('INSERT INTO NoticiasSalud (Titulo, Noticia, FechaPublicacion, EdadesObjetivo) VALUES (?,?,?,?)', 'Nueva campaña de vacunación contra la neumonía para mayores de 65 años','Las autoridades sanitarias han lanzado una nueva campaña de vacunación contra la neumonía, destinada exclusivamente a personas mayores de 65 años. La neumonía es una de las principales causas de complicaciones graves en los ancianos, por lo que la vacunación es fundamental para reducir los riesgos. Las vacunas estarán disponibles de manera gratuita en todos los centros de salud durante los próximos tres meses.','2024-10-01','Ancianos');
+// db.runAsync('INSERT INTO NoticiasSalud (Titulo, Noticia, FechaPublicacion, EdadesObjetivo) VALUES (?,?,?,?)', 'Nueva campaña de vacunación contra la viruela para menores de 15 años','Las autoridades sanitarias han lanzado una nueva campaña de vacunación contra la viruela, destinada exclusivamente a personas menores de 15 años. La viruela es una de las principales causas de complicaciones graves en los niños, por lo que la vacunación es fundamental para reducir los riesgos. Las vacunas estarán disponibles de manera gratuita en todos los centros de salud durante los próximos tres meses.','2024-10-05','Niños, Adolescentes, Adultos, Ancianos');
 // getDataSQLShowResult('SELECT * FROM NoticiasSalud');
+
+// INSERTAR CENTROS
+// Sin parada
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Hospital Universitario Rey Juan Carlos', 'Hospital universitario', '40.33940969004586', '-3.8718071239242016', 'Hospital', false, 60, '09:00:00', '22:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Hospital Universitario de Mostoles', 'Hospital gubernamental', '40.316296695698156', '-3.8781652747993145', 'Hospital', false, 60, '09:00:00', '22:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Hospital Universitario HM Puerta del Sur', 'Hospital privado', '40.31482387755508', '-3.8601422166663943', 'Hospital', true, 60, '09:00:00', '22:00:00');
+
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Centro de Salud Presentación Sabio', 'Centro de Salud público', '40.33363625695335', '-3.869667896675474', 'Centro de Salud', false, 30, '09:00:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Centro Salud El Soto', 'Centro de Salud público', '40.32902302175617', '-3.882456777184865', 'Centro de Salud', false, 30, '09:00:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Centro Salud Princesa', 'Centro de Salud público', '40.329610876605656', '-3.858981239205777', 'Centro de Salud', false, 30, '09:00:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Centro de Salud Dos de Mayo', 'Centro de Salud público', '40.319141933080545', '-3.871900048437423', 'Centro de Salud', false, 30, '09:00:00', '21:00:00');
+
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Farmacia Beatriz Conde Cavero', 'Horario: 9:30 - 21:00', '40.33343915155634', '-3.8623292218632077', 'Farmacia', true, 30, '09:30:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Farmacia Mostoles 24 Horas', 'Horario: 24H', '40.32862717477917', '-3.853402061468307', 'Farmacia', true, 30, '00:00:00', '00:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Farmacia Mostoles', 'Horario: 9:00 - 23:00', '40.3279095378517', '-3.8705692702072354', 'Farmacia', true, 30, '09:00:00', '23:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Farmacia Las Palmas 58', 'Horario: 8:30 - 21:30', '40.317078984375655', '-3.8652920073545136', 'Farmacia', true, 30, '09:00:00', '23:00:00');
+
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Safor Psicólogos', 'Horario: 10:00 - 21:00', '40.32463643828881', '-3.8538325826099173', 'Psicologo', true, 60, '10:00:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Elena García Psicología', 'Horario: 10:00 - 21:00', '40.320056024542005', '-3.8685967441500586', 'Psicologo', true, 60, '10:00:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Eva Psicologia - Psicologos Mostoles', 'Horario: 9:00 - 21:00', '40.32414593402784', '-3.866792694511889', 'Psicologo', true, 60, '09:00:00', '21:00:00');
+
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Fisioterapia y Podología - FisioIzquierdo desde 1967', 'Horario: 10:00 - 21:00', '40.33006719990879', '-3.8676499229652914', 'Fisioterapeuta', true, 60, '10:00:00', '21:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Clínica Fisiodiez Móstoles', 'Horario: 9:00 - 21:30', '40.320219018602096', '-3.8691536876398485', 'Fisioterapeuta', true, 60, '09:00:00', '21:30:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Fisioterapia en Móstoles | Instituto Fyos Salud Fisioterapia y Osteopatía', 'Horario: 9:30 - 20:00', '40.323914272569624', '-3.8610422841790584', 'Fisioterapeuta', true, 60, '09:30:00', '20:00:00');
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin) VALUES (?,?,?,?,?,?,?,?,?)', 'Fisioterapia Barón Móstoles', 'Horario: 9:00 - 22:00', '40.31982647824119', '-3.8738317983097406', 'Fisioterapeuta', true, 60, '09:00:00', '22:00:00');
+
+// Con parada
+// db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin, horaParada, horaVuelta) VALUES (?,?,?,?,?,?,?,?,?,?,?)', 'Psicólogos Móstoles Constitución', 'Horario: 9:00-14:00 / 17:00-21:00', '40.328612797903034', '-3.870639229967378', 'Psicologo', true, 60, '09:00:00', '21:00:00', '14:00:00', '17:00:00');
+getDataSQLShowResult('SELECT * FROM Centros');

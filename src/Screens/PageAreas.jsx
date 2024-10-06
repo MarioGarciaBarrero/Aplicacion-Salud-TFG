@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image  } from 'react-native'
-import { getDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
 const PageAreas = ({ route, navigation }) => {
     const { centro } = route.params;
@@ -26,7 +26,7 @@ const PageAreas = ({ route, navigation }) => {
     const renderItem = ({ item }) => (
       <TouchableOpacity style={styles.box} onPress={() => handlePress(item)}>
         <Text style={styles.boxTextTitle}>{item.name}</Text>
-        {item.name === 'Consulta General' && (
+        {item.name === 'Consulta general' && (
             <Image
                 source={require('C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/assets/images/ConsultaGeneral.png')}
                 style={styles.image}

@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { getDataSQL, getDataSQLShowResult, insertDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { getDataSQL, getDataSQLShowResult, insertDataSQL } from '../Components/SQLiteComponent.jsx';
 import bcrypt from 'react-native-bcrypt';
-import { AuthContext } from './AuthContext'
+import { AuthContext } from '../Components/AuthContext'
 
 const LogInRegister = ({navigation}) => {
     const { setUserId } = useContext(AuthContext); // Obtener el setter de userId

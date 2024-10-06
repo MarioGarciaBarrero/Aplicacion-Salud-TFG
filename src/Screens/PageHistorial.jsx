@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { AuthContext } from './AuthContext';
-import { getDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { AuthContext } from '../Components/AuthContext';
+import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
 const PageHistorial = () => {
   const { userId } = useContext(AuthContext);

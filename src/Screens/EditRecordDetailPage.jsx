@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { insertDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import { insertDataSQL } from '../Components/SQLiteComponent.jsx';
 
 export default function EditRecordDetailPage({ route, navigation }) {
   const { type, record } = route.params; // Recibimos el tipo y el registro

@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { useFonts } from 'expo-font';
 import * as Location from 'expo-location';
-import MapComponent from './MapComponent';
-import { AuthContext } from './AuthContext'
-import { getDataSQL } from 'C:/Users/Mario/Documents/TFG/Computadores/my-health-system-app/src/Components/SQLiteAPI.jsx';
+import MapComponent from '../Components/MapComponent';
+import { AuthContext } from '../Components/AuthContext'
+import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
 const Main = ({navigation}) => {
   const { userId } = useContext(AuthContext); // Obtener el userId
@@ -31,7 +31,7 @@ const Main = ({navigation}) => {
         //console.log(dataH);
         setHospitales(dataH);
 
-        const dataC = await getDataSQL('SELECT * FROM Centros WHERE Type = ?', 'Centro de salud');
+        const dataC = await getDataSQL('SELECT * FROM Centros WHERE Type = ?', 'Centro de Salud');
         // console.log(dataC);
         setCentroSalud(dataC);
 
