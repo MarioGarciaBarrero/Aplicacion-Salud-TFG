@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+import SincroniceData from './SincroniceData';
 
 // Abrir la base de datos (si no existe, se crea automáticamente)
 const db = SQLite.openDatabaseSync('SaludPublicaBBDD.db');
@@ -33,12 +34,16 @@ export const insertDataSQL = async (sqlQuery, params = []) => {
 };
 
 
-
+//SincroniceData();
+db.runAsync('DELETE FROM Centros WHERE id = 20');
 //INSERTAR Centros
 //db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaParada, horaVuelta, horaInicio, horaFin) VALUES (?,?,?,?,?,?)', 'Farmacia Mostoles', 'Horario: 9:00-23:00', '40.328612797903034', '-3.870639229967378', 'Farmacia', false);
 
 //AÑADIR NUEVOS CAMPOS A UNA TABLA
-//db.runAsync('ALTER TABLE Centros ADD COLUMN duracionCita INT');
+//db.runAsync('ALTER TABLE NoticiasSalud ADD COLUMN lastUpdate DATETIME');
+//db.runAsync('UPDATE NoticiasSalud SET lastUpdate = ?', '2024-10-01T12:00:00');
+//getDataSQLShowResult('SELECT * FROM Centros');
+
 
 //ACTUALIZAR TABLA
 // db.runAsync('UPDATE Usuario SET password = ? WHERE id = 2', '$2a$10$BHMLv.GYsS5hhBK0o9slHOPFbXdDRYfn8sGRltID.wRP3xsYBDUoW');
@@ -107,7 +112,7 @@ export const insertDataSQL = async (sqlQuery, params = []) => {
 //INSERTAR USUARIOS
 //db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Mario', 'García Barrero', 'm.garciaba.2019@alumnos.urjc.es', '1234', '616879471', false);
 //db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Admin', 'Test', 'admin', '1234', '123456789', true);
-getDataSQLShowResult('SELECT * FROM Usuario');
+// getDataSQLShowResult('SELECT * FROM Usuario');
 
 // INSERTAR DIAS
 // db.runAsync('INSERT INTO Dia (date, festivo) VALUES (?,?)', ('2024-10-01'), 0);
@@ -294,4 +299,4 @@ getDataSQLShowResult('SELECT * FROM Usuario');
 
 // Con parada
 // db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaInicio, horaFin, horaParada, horaVuelta) VALUES (?,?,?,?,?,?,?,?,?,?,?)', 'Psicólogos Móstoles Constitución', 'Horario: 9:00-14:00 / 17:00-21:00', '40.328612797903034', '-3.870639229967378', 'Psicologo', true, 60, '09:00:00', '21:00:00', '14:00:00', '17:00:00');
-getDataSQLShowResult('SELECT * FROM Centros');
+// getDataSQLShowResult('SELECT * FROM Centros');

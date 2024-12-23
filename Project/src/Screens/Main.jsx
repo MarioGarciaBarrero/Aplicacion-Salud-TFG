@@ -4,6 +4,7 @@ import {Picker} from '@react-native-picker/picker';
 import { useFonts } from 'expo-font';
 import * as Location from 'expo-location';
 import MapComponent from '../Components/MapComponent';
+import SincroniceData from '../Components/SincroniceData';
 import { AuthContext } from '../Components/AuthContext'
 import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 
@@ -26,6 +27,7 @@ const Main = ({navigation}) => {
   useEffect(() => {
 
     const fetchData = async () => {
+      //SincroniceData();
       try {
         const dataH = await getDataSQL('SELECT * FROM Centros WHERE Type = ?', 'Hospital');
         //console.log(dataH);
