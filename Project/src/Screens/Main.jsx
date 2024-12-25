@@ -27,7 +27,7 @@ const Main = ({navigation}) => {
   useEffect(() => {
 
     const fetchData = async () => {
-      //SincroniceData();
+      SincroniceData();
       try {
         const dataH = await getDataSQL('SELECT * FROM Centros WHERE Type = ?', 'Hospital');
         //console.log(dataH);

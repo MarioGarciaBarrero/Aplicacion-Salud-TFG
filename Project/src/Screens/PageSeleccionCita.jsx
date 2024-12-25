@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { getDataSQL, getDataSQLShowResult } from '../Components/SQLiteComponent.jsx';
-import moment from 'moment'; // Para manipular fechas
+import { getDataSQL, getDataSQLShowResult, insertDataSQL, getDataSQLAwait } from '../Components/SQLiteComponent.jsx';
+import moment from 'moment';
 import { AuthContext } from '../Components/AuthContext'
+import axios from 'axios';
 
 const PageSeleccionCita = ({ route, navigation }) => {
   const { userId } = useContext(AuthContext);
@@ -53,7 +54,7 @@ const PageSeleccionCita = ({ route, navigation }) => {
 
   function comprobarCita(centro, area, fecha, hora){
       try {
-        console.log(centro, area, fecha, hora);
+        //console.log(centro, area, fecha, hora);
         const resultado = getDataSQLShowResult('SELECT id FROM Cita WHERE centro_id = ? AND area_id = ? AND fecha = ? AND hora = ? AND estado != \'Cancelada\'', [centro, area, fecha, hora]);
         
         // Accede a la propiedad que contiene los resultados
@@ -214,9 +215,41 @@ const PageSeleccionCita = ({ route, navigation }) => {
     );
   };
 
-  const crearCita = (hora) => {
-    getDataSQL('INSERT INTO Cita (user_id, centro_id, area_id, fecha, hora, estado) VALUES (?,?,?,?,?,?)', [userId, centroArea.centro, centroArea.area, selectedDay, hora, 'Pendiente']);
+  const crearCita = async (hora) => {
+    const currentDateTime = new Date().toISOString();
+    const currentDateTimeBBDDremote = moment().format('YYYY-MM-DD HH:mm:ss');
+    //console.log('CurrentTime: ', currentDateTime);
+    const result = await insertDataSQL('INSERT INTO Cita (user_id, centro_id, area_id, fecha, hora, estado, lastUpdate) VALUES (?,?,?,?,?,?,?)', [userId, centroArea.centro, centroArea.area, selectedDay, hora, 'Pendiente', currentDateTime]);
+    const cita = await getDataSQLAwait('SELECT Id FROM Cita WHERE user_id = ? ORDER BY lastUpdate DESC LIMIT 1', [userId]);
+    console.log('Cita creada con ID:', cita[0].id);
+    crearCitaBBDDRemota(cita[0].id, hora, currentDateTimeBBDDremote);
   }
+
+  const crearCitaBBDDRemota = async(citaId, hora, currentDateTimeBBDDremote) =>{
+    try {
+      const jsonData = {
+        table: "Cita",
+        data: {
+          id: citaId, // Incluye el ID de la cita
+          user_id: userId,
+          centro_id: centroArea.centro,
+          area_id: centroArea.area,
+          fecha: selectedDay,
+          hora: hora,
+          estado: "Pendiente",
+          lastUpdate: currentDateTimeBBDDremote
+        }
+      };
+
+      // Envía el JSON a la API
+      const response = await axios.post(process.env.API_URL + '/insert', jsonData);
+      console.log('Datos insertados correctamente:', response.data);
+
+    } catch (error) {
+      console.error('Error al insertar datos:', error);
+    }
+  }
+
   return (
     <View>
       <Calendar

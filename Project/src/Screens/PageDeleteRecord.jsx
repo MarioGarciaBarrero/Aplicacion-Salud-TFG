@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, ScrollView, StyleSheet, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { getDataSQL, insertDataSQL } from '../Components/SQLiteComponent.jsx';
+import axios from 'axios';
 
 export default function PageDeleteRecord({ route, navigation }) {
     const { type } = route.params; // Recibimos el tipo de entidad (Centros, Areas, Usuarios, Noticias)
@@ -77,6 +78,7 @@ export default function PageDeleteRecord({ route, navigation }) {
     const deleteRecord = (tipo, id) => {
         // Mostrar alerta para confirmar la eliminación
         console.log(tipo, id);
+        let table;
         Alert.alert(
         'Eliminar Registro',
         '¿Está seguro de que desea eliminar este registro?',
@@ -94,24 +96,31 @@ export default function PageDeleteRecord({ route, navigation }) {
                 
                 switch (tipo) {
                 case 'Centros':
-                    query = `DELETE FROM Centros WHERE id = ?`;
-                    break;
+                  table = 'Centros';
+                  query = `DELETE FROM Centros WHERE id = ?`;
+                  break;
                 case 'Areas':
-                    query = `DELETE FROM Area WHERE id = ?`;
-                    break;
+                  table = 'Area';
+                  query = `DELETE FROM Area WHERE id = ?`;
+                  break;
                 case 'Usuarios':
-                    query = `DELETE FROM Usuario WHERE id = ?`;
-                    break;
+                  table = 'Usuario';
+                  query = `DELETE FROM Usuario WHERE id = ?`;
+                  break;
                 case 'Noticias':
-                    query = `DELETE FROM NoticiasSalud WHERE id = ?`;
-                    break;
+                  table = 'NoticiasSalud';
+                  query = `DELETE FROM NoticiasSalud WHERE id = ?`;
+                  break;
                 default:
-                    Alert.alert('Error', 'Tipo de registro no reconocido');
-                    return;
+                  Alert.alert('Error', 'Tipo de registro no reconocido');
+                  return;
                 }
     
                 // Ejecutar la query para eliminar el registro
                 insertDataSQL(query, [id]);
+
+                // Eliminar el registro de la base de datos remota
+                eliminarObjetoBBDDRemota(table, id);
     
                 // Mostrar confirmación de eliminación exitosa
                 Alert.alert('Éxito', `El registro ha sido eliminado correctamente.`);
@@ -121,6 +130,30 @@ export default function PageDeleteRecord({ route, navigation }) {
         ],
         { cancelable: true }
         );
+    };
+
+    const eliminarObjetoBBDDRemota = async (table, objectId) => {
+      try {
+        const jsonData = {
+          table: table,
+          id: objectId
+        };
+    
+        console.log('Datos a enviar:', jsonData);
+    
+        // Envía el JSON a la API
+        const response = await axios.post(process.env.API_URL + '/delete', jsonData);
+        console.log('Datos insertados correctamente:', response.data);
+      } catch (error) {
+        if (error.response) {
+          console.error('Error en la respuesta del servidor:', error.response.data);
+        } else if (error.request) {
+          console.error('No se recibió respuesta del servidor:', error.request);
+        } else {
+          console.error('Error al configurar la solicitud:', error.message);
+        }
+        console.error('Error al insertar datos:', error.config);
+      }
     };
 
   

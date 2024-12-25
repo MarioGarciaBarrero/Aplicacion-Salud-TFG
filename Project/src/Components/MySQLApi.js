@@ -52,9 +52,9 @@ app.post('/compare-update', (req, res) => {
       return res.status(500).json({ error: 'Error al consultar la base de datos remota' });
     }
 
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Centro no encontrado en la base de datos remota' });
-    }
+    // if (results.length === 0) {
+    //   return res.status(404).json({ error: 'El objeto no encontrado en la base de datos remota' });
+    // }
 
     const remoteData = results;
     const { lastUpdate: lastUpdateRemote } = remoteData;
@@ -62,24 +62,61 @@ app.post('/compare-update', (req, res) => {
     return res.status(200).json({
       remoteData
     });
-
-    // // Comparamos las fechas
-    // if (new Date(lastUpdateRemote) > new Date(lastUpdateLocal)) {
-    //   // Si la fecha remota es más reciente, devolvemos los datos completos del centro
-    //   return res.status(200).json({
-    //     shouldUpdate: true,
-    //     data: remoteData,
-    //   });
-    // } else {
-    //   // Si la fecha local es igual o más reciente, no es necesario actualizar
-    //   return res.status(200).json({
-    //     shouldUpdate: false,
-    //     message: 'No hay actualizaciones necesarias',
-    //   });
-    // }
   });
 });
 
+// Endpoint para insertar datos
+app.post('/insert', (req, res) => {
+  const { table, data } = req.body;
+
+  // Construir la consulta SQL de inserción
+  const fields = Object.keys(data).join(', ');
+  const values = Object.values(data).map(value => mysql.escape(value)).join(', ');
+
+  const queryIn = `INSERT INTO ${table} (${fields}) VALUES (${values})`;
+
+  console.log(queryIn);
+
+  db.query(queryIn, (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error al insertar datos en la base de datos' });
+    }
+    return res.status(200).json({ message: 'Datos insertados correctamente', results });
+  });
+});
+
+// Endpoint para actualizar datos
+app.post('/update', (req, res) => {
+  const { table, data, id } = req.body;
+
+  // Construir la consulta SQL de actualización
+  const updates = Object.keys(data).map(key => `${key} = ${mysql.escape(data[key])}`).join(', ');
+
+  const query = `UPDATE ${table} SET ${updates} WHERE id = ${mysql.escape(id)}`;
+
+  console.log(query);
+
+  db.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error al actualizar datos en la base de datos' });
+    }
+    return res.status(200).json({ message: 'Datos actualizados correctamente', results });
+  });
+});
+
+// Endpoint para eliminar datos
+app.post('/delete', (req, res) => {
+  const { table, id } = req.body;
+
+  const query = `DELETE FROM ${table} WHERE id = ${mysql.escape(id)}`;
+
+  db.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error al eliminar datos en la base de datos' });
+    }
+    return res.status(200).json({ message: 'Datos eliminados correctamente', results });
+  });
+});
 
 app.listen(3000, () => {
   console.log(`Servidor corriendo en el puerto 3000`);

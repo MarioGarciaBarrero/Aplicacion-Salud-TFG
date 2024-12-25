@@ -13,6 +13,15 @@ export const getDataSQL = async (sqlQuery, params = []) => {
     }
 };
 
+export const getDataSQLAwait = async (sqlQuery, params = []) => {
+    try {
+        const result = await db.getAllSync(sqlQuery, params);
+        return result;
+    } catch (error) {
+        console.error('Error en la consulta', error);
+    }
+};
+
 export const getDataSQLShowResult = async (sqlQuery, params = []) => {
     try {
         const result = db.getAllSync(sqlQuery, params);
@@ -25,57 +34,57 @@ export const getDataSQLShowResult = async (sqlQuery, params = []) => {
 
 export const insertDataSQL = async (sqlQuery, params = []) => {
     try {
-        const result = db.runAsync(sqlQuery, params);
-        // console.log('\nConsulta realizada: ', sqlQuery);
+        const result = await db.runAsync(sqlQuery, params);
+        console.log('\nresult: ', result);
         return result;
     } catch (error) {
         console.error('Error en la insercción', error);
     }
 };
 
-
+  
 //SincroniceData();
-db.runAsync('DELETE FROM Centros WHERE id = 20');
+//db.runAsync('DELETE FROM Centros WHERE id = 20');
 //INSERTAR Centros
 //db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaParada, horaVuelta, horaInicio, horaFin) VALUES (?,?,?,?,?,?)', 'Farmacia Mostoles', 'Horario: 9:00-23:00', '40.328612797903034', '-3.870639229967378', 'Farmacia', false);
 
 //AÑADIR NUEVOS CAMPOS A UNA TABLA
-//db.runAsync('ALTER TABLE NoticiasSalud ADD COLUMN lastUpdate DATETIME');
+//db.runAsync('ALTER TABLE Usuario ADD COLUMN lastUpdate DATETIME');
 //db.runAsync('UPDATE NoticiasSalud SET lastUpdate = ?', '2024-10-01T12:00:00');
 //getDataSQLShowResult('SELECT * FROM Centros');
 
 
 //ACTUALIZAR TABLA
-// db.runAsync('UPDATE Usuario SET password = ? WHERE id = 2', '$2a$10$BHMLv.GYsS5hhBK0o9slHOPFbXdDRYfn8sGRltID.wRP3xsYBDUoW');
-// db.runAsync('UPDATE Usuario SET admin = ? WHERE id = 1', false);
+//db.runAsync('UPDATE Usuario SET password = ? WHERE id = 2', '$2a$10$2Q41J0kAVY3lFqDdnRy7Se.yUCcTNj5jcNklECZNp4Derpzr6ZYza');
+//db.runAsync('UPDATE Usuario SET admin = ? WHERE id = 2', true);
 // db.runAsync('UPDATE Area SET name = ? WHERE Id = 1', 'Consulta General');
 // getDataSQLShowResult('SELECT id, horaInicio, horaFin, horaParada, horaVuelta, duracionCita FROM Centros WHERE Type !=?', 'Farmacia');
 // db.runAsync('UPDATE Centros SET horaInicio = ?, horaFin = ?, horaParada = ?, horaVuelta = ?, duracionCita = ? WHERE Id = 41', '09:00:00', '22:00:00', '14:00:00', '17:00:00', 60);
 
 //BORRAR REGISTROS DE UNA TABLA
-// db.runAsync('DELETE FROM Usuario WHERE id = 4');
+//db.runAsync('DELETE FROM NoticiasSalud WHERE id > 2');
+getDataSQLShowResult('SELECT * FROM Centros'); 
+//getDataSQLShowResult('SELECT * FROM Cita'); 
 
-// getDataSQLShowResult('SELECT * FROM Usuario');
-
-//INSERTAR TABLAS
-// db.runAsync('CREATE TABLE Centros (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, latitude VARCHAR(255) NOT NULL, longitude VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, privado BOOLEAN NOT NULL, duracionCita INTEGER NOT NULL, horaParada TIME, horaVuelta TIME, horaInicio TIME NOT NULL, horaFin TIME NOT NULL)');
-// db.runAsync('CREATE TABLE Usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, telefono VARCHAR(15), fechaNacimiento DATE, admin BOOLEAN DEFAULT false)');
-// db.runAsync('CREATE TABLE Area (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL, centro_id INT, FOREIGN KEY (centro_id) REFERENCES Centros(id))');
+// //INSERTAR TABLAS
+// db.runAsync('CREATE TABLE Centros (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, latitude VARCHAR(255) NOT NULL, longitude VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, privado BOOLEAN NOT NULL, duracionCita INTEGER NOT NULL, horaParada TIME, horaVuelta TIME, horaInicio TIME NOT NULL, horaFin TIME NOT NULL, lastUpdate DATETIME)');
+// db.runAsync('CREATE TABLE Usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, telefono VARCHAR(15), fechaNacimiento DATE, admin BOOLEAN DEFAULT false, lastUpdate DATETIME)');
+// db.runAsync('CREATE TABLE Area (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL, centro_id INT lastUpdate DATETIME, FOREIGN KEY (centro_id) REFERENCES Centros(id))');
 // db.runAsync('CREATE TABLE Dia (id INTEGER PRIMARY KEY AUTOINCREMENT, date DATE NOT NULL, festivo BOOLEAN NOT NULL)');
 // db.runAsync('CREATE TABLE Horario (id INTEGER PRIMARY KEY AUTOINCREMENT, hora TIME, duracion INTEGER)');
 // db.runAsync('CREATE TABLE Cita (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INT, centro_id INT, area_id INT, fecha DATE, hora TIME, estado VARCHAR(255) DEFAULT \'Pendiente\')');
 
-// db.runAsync('CREATE TABLE ConsultasGenerales (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaConsulta DATE NOT NULL, idMedico INTEGER NOT NULL, diagnostico TEXT, tratamiento TEXT)');
-// db.runAsync('CREATE TABLE Alergias (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaDescubrimiento DATE NOT NULL, alergia TEXT NOT NULL)');
-// db.runAsync('CREATE TABLE Vacunas (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaVacuna DATE NOT NULL, nombreVacuna TEXT NOT NULL)');
-// db.runAsync('CREATE TABLE Resultados (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaResultado DATE NOT NULL, tipoPrueba TEXT NOT NULL, resultado TEXT NOT NULL)');
-// db.runAsync('CREATE TABLE EnfermedadesCronicas (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaDescubrimiento DATE NOT NULL, enfermedad TEXT NOT NULL)');
+// db.runAsync('CREATE TABLE ConsultasGenerales (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaConsulta DATE NOT NULL, idMedico INTEGER NOT NULL, diagnostico TEXT, tratamiento TEXT, lastUpdate DATETIME)');
+// db.runAsync('CREATE TABLE Alergias (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaDescubrimiento DATE NOT NULL, alergia TEXT NOT NULL, lastUpdate DATETIME)');
+// db.runAsync('CREATE TABLE Vacunas (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaVacuna DATE NOT NULL, nombreVacuna TEXT NOT NULL, lastUpdate DATETIME)');
+// db.runAsync('CREATE TABLE Resultados (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaResultado DATE NOT NULL, tipoPrueba TEXT NOT NULL, resultado TEXT NOT NULL, lastUpdate DATETIME)');
+// db.runAsync('CREATE TABLE EnfermedadesCronicas (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER NOT NULL, fechaDescubrimiento DATE NOT NULL, enfermedad TEXT NOT NULL, lastUpdate DATETIME)');
 
-// db.runAsync('CREATE TABLE NoticiasSalud (id INTEGER PRIMARY KEY AUTOINCREMENT, Titulo TEXT NOT NULL, Noticia TEXT NOT NULL, FechaPublicacion DATE NOT NULL, EdadesObjetivo TEXT NOT NULL)');
+// db.runAsync('CREATE TABLE NoticiasSalud (id INTEGER PRIMARY KEY AUTOINCREMENT, Titulo TEXT NOT NULL, Noticia TEXT NOT NULL, FechaPublicacion DATE NOT NULL, EdadesObjetivo TEXT NOT NULL, lastUpdate DATETIME)');
 
 // db.runAsync('DROP TABLE Centros');
 
-// db.runAsync('ALTER TABLE Usuario ADD COLUMN fechaNacimiento DATE');
+// db.runAsync('ALTER TABLE Cita ADD COLUMN lastUpdate DATETIME');
 
 //INSERTAR CITAS
 // db.runAsync('DELETE FROM Cita WHERE id = 1');
@@ -110,8 +119,8 @@ db.runAsync('DELETE FROM Centros WHERE id = 20');
 
 
 //INSERTAR USUARIOS
-//db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Mario', 'García Barrero', 'm.garciaba.2019@alumnos.urjc.es', '1234', '616879471', false);
-//db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Admin', 'Test', 'admin', '1234', '123456789', true);
+// db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Mario', 'García Barrero', 'm.garciaba.2019@alumnos.urjc.es', '1234', '616879471', false);
+// db.runAsync('INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)', 'Admin', 'Test', 'admin', '1234', '123456789', true);
 // getDataSQLShowResult('SELECT * FROM Usuario');
 
 // INSERTAR DIAS

@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import moment from 'moment';
 
 const PageNoticiaDetallada = ({ route }) => {
   // Recibimos los datos de la noticia desde la ruta
   const { noticia } = route.params;
 
-  console.log(noticia);
+  //console.log(noticia);
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Título de la noticia */}
       <Text style={styles.title}>{noticia.Titulo}</Text>
 
       {/* Fecha de publicación */}
-      <Text style={styles.date}>Publicado el: {noticia.FechaPublicacion}</Text>
+      <Text style={styles.date}>Publicado el: {moment(noticia.FechaPublicacion).format('DD-MM-YYYY HH:mm:ss')}</Text>
 
       {/* Desarrollo completo de la noticia */}
       <Text style={styles.content}>{noticia.Noticia}</Text>

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import bcrypt from 'react-native-bcrypt';
-import { insertDataSQL } from '../Components/SQLiteComponent.jsx';
+import { insertDataSQL, getDataSQLAwait } from '../Components/SQLiteComponent.jsx';
+import moment from 'moment';
+import axios from 'axios';
 
 export default function PageAddRecord({ navigation, route }) {
   const { type } = route.params; // Recibimos el tipo de entidad (Centros, Areas, Usuarios, Noticias)
@@ -138,39 +140,77 @@ export default function PageAddRecord({ navigation, route }) {
     return valid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       Alert.alert('Error', 'Por favor, corrige los errores del formulario.');
       return;
     }
 
+    const currentDateTime = new Date().toISOString();
+    const currentDateTimeBBDDremote = moment().format('YYYY-MM-DD HH:mm:ss');
+
     let query = '';
     let values = [];
+    let table;
 
     switch (type) {
       case 'Centros':
-        query = `INSERT INTO Centros (description, name, duracionCita, horaFin, horaInicio, horaParada, horaVuelta, latitude, longitude, privado, type) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
-        values = [formData.description, formData.name, formData.duracionCita, formData.horaFin, formData.horaInicio, formData.horaParada, formData.horaVuelta, formData.latitude, formData.longitude, formData.privado, formData.type];
+        table = 'Centros';
+        query = `INSERT INTO Centros (description, name, duracionCita, horaFin, horaInicio, horaParada, horaVuelta, latitude, longitude, privado, type, lastUpdate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
+        values = [formData.description, formData.name, formData.duracionCita, formData.horaFin, formData.horaInicio, formData.horaParada, formData.horaVuelta, formData.latitude, formData.longitude, formData.privado, formData.type, currentDateTime];
         break;
       case 'Areas':
-        query = `INSERT INTO Area (name, centro_id) VALUES (?, ?)`;
-        values = [formData.name, formData.centro_id];
+        table = 'Area';
+        query = `INSERT INTO Area (name, centro_id, lastUpdate) VALUES (?,?,?)`;
+        values = [formData.name, formData.centro_id, currentDateTime];
         break;
       case 'Usuarios':
-        query = `INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin) VALUES (?,?,?,?,?,?,?)`;
-        values = [formData.nombre, formData.apellidos, formData.email, formData.password, formData.telefono, formData.fechaNacimiento, formData.admin];
+        table = 'Usuario';
+        query = `INSERT INTO Usuario (nombre, apellidos, email, password, telefono, fechaNacimiento, admin, lastUpdate) VALUES (?,?,?,?,?,?,?,?)`;
+        values = [formData.nombre, formData.apellidos, formData.email, formData.password, formData.telefono, formData.fechaNacimiento, formData.admin, currentDateTime];
         break;
       case 'Noticias':
-        query = `INSERT INTO NoticiasSalud (Titulo, Noticia, FechaPublicacion, EdadesObjetivo) VALUES (?,?,?,?)`;
-        values = [formData.Titulo, formData.Noticia, formData.FechaPublicacion, formData.EdadesObjetivo];
+        table = 'noticiassalud';
+        query = `INSERT INTO NoticiasSalud (Titulo, Noticia, FechaPublicacion, EdadesObjetivo, lastUpdate) VALUES (?,?,?,?,?)`;
+        values = [formData.Titulo, formData.Noticia, formData.FechaPublicacion, formData.EdadesObjetivo, currentDateTime];
         break;
     }
 
     // Llamada a la función insertDataSQL con la query y los valores.
-    insertDataSQL(query, values);
+    await insertDataSQL(query, values);
+
+    // Obtener el último objeto insertado
+    const objectId = await getDataSQLAwait(`SELECT Id FROM ${table} ORDER BY id DESC LIMIT 1`);
+    formData.id = objectId[0].id;
+    formData.lastUpdate = currentDateTimeBBDDremote;
+    insertarObjetoBBDDRemota(table, formData);
 
     Alert.alert('Creacion correcta', 'Se ha registrado correctamente la información en la Base de Datos');
     navigation.navigate('EditHomePage');
+  };
+
+  const insertarObjetoBBDDRemota = async (table, data) => {
+    try {
+      const jsonData = {
+        table: table,
+        data: data
+      };
+  
+      console.log('Datos a enviar:', jsonData);
+  
+      // Envía el JSON a la API
+      const response = await axios.post(process.env.API_URL + '/insert', jsonData);
+      console.log('Datos insertados correctamente:', response.data);
+    } catch (error) {
+      if (error.response) {
+        console.error('Error en la respuesta del servidor:', error.response.data);
+      } else if (error.request) {
+        console.error('No se recibió respuesta del servidor:', error.request);
+      } else {
+        console.error('Error al configurar la solicitud:', error.message);
+      }
+      console.error('Error al insertar datos:', error.config);
+    }
   };
 
   return (

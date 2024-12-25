@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../Components/AuthContext';
-import { getDataSQL } from '../Components/SQLiteComponent.jsx';
+import { getDataSQL, getDataSQLShowResult } from '../Components/SQLiteComponent.jsx';
+import axios from 'axios';
 
 const PageMisCitas = ({ navigation }) => {
     const { userId } = useContext(AuthContext);
@@ -42,22 +43,59 @@ const PageMisCitas = ({ navigation }) => {
     const cancelarCita = async (citaId) => {
       try {
         await getDataSQL('UPDATE Cita SET estado = ? WHERE id = ?', ['Cancelada', citaId]);
+        await cancelarCitaBBDDremota(citaId);
         Alert.alert('Cita cancelada', 'La cita ha sido cancelada exitosamente.');
         navigation.navigate('Home');
       } catch (error) {
         Alert.alert('Error', 'No se pudo cancelar la cita.');
       }
     };
+
+    const cancelarCitaBBDDremota = async (citaId) => {
+      try {
+        const jsonData = {
+          table: 'Cita',
+          data: { estado: 'Cancelada' },
+          id: citaId,
+        };
+
+        const response = await axios.post(process.env.API_URL + '/update', jsonData);
+        console.log('Cita cancelada:', response.data);
+
+      } catch (error) {
+        console.error('Error al cancelar la cita:', error);
+      }
+
+    }
+
+      
   
     const borrarCita = async (citaId) => {
       try {
         await getDataSQL('DELETE FROM Cita WHERE id = ?', [citaId]);
+        await borrarCitaBBDDremota(citaId);
         Alert.alert('Cita eliminada', 'La cita ha sido eliminada exitosamente.');
         navigation.navigate('Home');
     } catch (error) {
         Alert.alert('Error', 'No se pudo eliminar la cita.');
     }
     };
+
+    const borrarCitaBBDDremota = async (citaId) => {
+      try {
+        const jsonData = {
+          table: 'Cita',
+          id: citaId,
+        };
+
+        const response = await axios.post(process.env.API_URL + '/delete', jsonData);
+        console.log('Cita eliminada:', response.data);
+
+      } catch (error) {
+        console.error('Error al eliminar la cita:', error);
+      }
+
+    }
   
     return (
       <ScrollView style={styles.container}>

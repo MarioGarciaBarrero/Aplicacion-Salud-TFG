@@ -75,7 +75,7 @@ const LogInRegister = ({navigation}) => {
     if (!loginData.email || !loginData.password) {
       Alert.alert('Error', 'Por favor, completa todos los campos de inicio de sesión');
     } else {
-        const resultado = getDataSQL('SELECT * FROM Usuario WHERE email = ?', [loginData.email])
+        const resultado = getDataSQLShowResult('SELECT * FROM Usuario WHERE email = ?', [loginData.email])
         const user = resultado._j || [];
         if (user.length > 0){
             const validPassword = bcrypt.compareSync(loginData.password, user[0].password);

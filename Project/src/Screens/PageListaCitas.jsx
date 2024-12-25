@@ -22,14 +22,12 @@ const PageListaCitas = ({ route, navigation }) => {
     
 
     const handlePress = (centro) => {
-        // Aquí puedes manejar la acción al pulsar el botón
-        console.log(centro.type);
+        //console.log(centro.type);
         if(centro.type == 'Hospital' || centro.type == 'Centro de Salud'){
           navigation.navigate('Areas', { centro });
         }else{
           navigation.navigate('Citas', { areaSeleccionada: null, centroSeleccionado: centro});
         }
-        // Puedes navegar a otra pantalla o realizar otra acción
       };
     
       const renderItem = ({ item }) => {

@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { AuthContext } from '../Components/AuthContext';
 import { getDataSQL } from '../Components/SQLiteComponent.jsx';
 import { TouchableOpacity } from 'react-native';
+import moment from 'moment';
 
 const PageNoticias = ({ navigation }) => {
   const { userId } = useContext(AuthContext);  // Obtener el userId
@@ -91,7 +92,7 @@ const PageNoticias = ({ navigation }) => {
                     <Text style={styles.newsSnippet}>
                     {noticia.Noticia ? noticia.Noticia.substring(0, 100) : ''}...
                     </Text>  
-                    <Text style={styles.newsDate}>Fecha de publicación: {noticia.FechaPublicacion}</Text>
+                    <Text style={styles.newsDate}>Fecha de publicación: {moment(noticia.FechaPublicacion).format('DD-MM-YYYY HH:mm:ss')}</Text>
                 </TouchableOpacity>
               </View>
             ))
