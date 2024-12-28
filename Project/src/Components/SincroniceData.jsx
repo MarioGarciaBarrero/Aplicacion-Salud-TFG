@@ -39,29 +39,11 @@ export default SincroniceData = async () => {
             object: 'vacunas',
         });
 
-
-        //
-
-        // const CentrosLDB = await getDataSQL('SELECT Id, lastUpdate FROM Centros');
-        // const AreasLDB = await getDataSQL('SELECT Id, lastUpdate FROM Area');
-        // const NoticiasLDB = await getDataSQL('SELECT Id, lastUpdate FROM noticiassalud');
-        // const CitasLDB = await getDataSQL('SELECT Id, lastUpdate FROM Cita');
-        // const AlergiasLDB = await getDataSQL('SELECT Id, lastUpdate FROM Alergias');
-        // const ConsultasLDB = await getDataSQL('SELECT Id, lastUpdate FROM consultasgenerales');
-        // const EnfermedadesLDB = await getDataSQL('SELECT Id, lastUpdate FROM enfermedadescronicas');
-        // const ResultadosLDB = await getDataSQL('SELECT Id, lastUpdate FROM resultados');
-        // const VacunasLDB = await getDataSQL('SELECT Id, lastUpdate FROM vacunas');
-
         // Centros
-        //console.log('Tamaño ' + CentrosRDB.data.remoteData.length)
         for (let i = 0; i < CentrosRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM Centros WHERE Id = ' + CentrosRDB.data.remoteData[i].id);
             const CentroLDB = await getDataSQL('SELECT Id, lastUpdate FROM Centros WHERE Id = ?', CentrosRDB.data.remoteData[i].id);
-            //console.log(CentroLDB[0].lastUpdate);
-            //console.log('Fecha R: ' + new Date(CentrosRDB.data.remoteData[i].lastUpdate) + ' || Fecha L: ' + new Date(CentroLDB[0].lastUpdate));
             if(CentroLDB[0] != null){
                 if (new Date(CentrosRDB.data.remoteData[i].lastUpdate) > new Date(CentroLDB[0].lastUpdate)) {
-                    //console.log('ENTRO');
                     await insertDataSQL(
                         'UPDATE Centros SET name = ?, description = ?, latitude = ?, longitude = ?, type = ?, privado = ?, duracionCita = ?, horaInicio = ?, horaFin = ?, horaParada = ?, horaVuelta = ?, lastUpdate = ? WHERE id = ?',
                         [
@@ -105,7 +87,6 @@ export default SincroniceData = async () => {
 
         // Areas
         for (let i = 0; i < AreasRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM Area WHERE Id = ' + AreasRDB.data.remoteData[i].id);
             const AreaLDB = await getDataSQL('SELECT Id, lastUpdate FROM Area WHERE Id = ?', AreasRDB.data.remoteData[i].id);
             if (AreaLDB[0] != null) {
                 if (new Date(AreasRDB.data.remoteData[i].lastUpdate) > new Date(AreaLDB[0].lastUpdate)) {
@@ -134,7 +115,6 @@ export default SincroniceData = async () => {
 
         // NoticiasSalud
         for (let i = 0; i < NoticiasRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM NoticiasSalud WHERE Id = ' + NoticiasRDB.data.remoteData[i].id);
             const NoticiaLDB = await getDataSQL('SELECT Id, lastUpdate FROM NoticiasSalud WHERE Id = ?', NoticiasRDB.data.remoteData[i].id);
             if (NoticiaLDB[0] != null) {
                 if (new Date(NoticiasRDB.data.remoteData[i].lastUpdate) > new Date(NoticiaLDB[0].lastUpdate)) {
@@ -167,7 +147,6 @@ export default SincroniceData = async () => {
         
         // ConsultasGenerales
         for (let i = 0; i < ConsultasRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM ConsultasGenerales WHERE Id = ' + ConsultasRDB.data.remoteData[i].id);
             const ConsultaLDB = await getDataSQL('SELECT Id, lastUpdate FROM ConsultasGenerales WHERE Id = ?', ConsultasRDB.data.remoteData[i].id);
             if (ConsultaLDB[0] != null) {
                 if (new Date(ConsultasRDB.data.remoteData[i].lastUpdate) > new Date(ConsultaLDB[0].lastUpdate)) {
@@ -202,7 +181,6 @@ export default SincroniceData = async () => {
         
         // Alergias
         for (let i = 0; i < AlergiasRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM Alergias WHERE Id = ' + AlergiasRDB.data.remoteData[i].id);
             const AlergiaLDB = await getDataSQL('SELECT Id, lastUpdate FROM Alergias WHERE Id = ?', AlergiasRDB.data.remoteData[i].id);
             if (AlergiaLDB[0] != null) {
                 if (new Date(AlergiasRDB.data.remoteData[i].lastUpdate) > new Date(AlergiaLDB[0].lastUpdate)) {
@@ -233,7 +211,6 @@ export default SincroniceData = async () => {
         
         // Vacunas
         for (let i = 0; i < VacunasRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM Vacunas WHERE Id = ' + VacunasRDB.data.remoteData[i].id);
             const VacunaLDB = await getDataSQL('SELECT Id, lastUpdate FROM Vacunas WHERE Id = ?', VacunasRDB.data.remoteData[i].id);
             if (VacunaLDB[0] != null) {
                 if (new Date(VacunasRDB.data.remoteData[i].lastUpdate) > new Date(VacunaLDB[0].lastUpdate)) {
@@ -264,7 +241,6 @@ export default SincroniceData = async () => {
         
         // Resultados
         for (let i = 0; i < ResultadosRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM Resultados WHERE Id = ' + ResultadosRDB.data.remoteData[i].id);
             const ResultadoLDB = await getDataSQL('SELECT Id, lastUpdate FROM Resultados WHERE Id = ?', ResultadosRDB.data.remoteData[i].id);
             if (ResultadoLDB[0] != null) {
                 if (new Date(ResultadosRDB.data.remoteData[i].lastUpdate) > new Date(ResultadoLDB[0].lastUpdate)) {
@@ -297,7 +273,6 @@ export default SincroniceData = async () => {
         
         // EnfermedadesCronicas
         for (let i = 0; i < EnfermedadesRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM EnfermedadesCronicas WHERE Id = ' + EnfermedadesRDB.data.remoteData[i].id);
             const EnfermedadLDB = await getDataSQL('SELECT Id, lastUpdate FROM EnfermedadesCronicas WHERE Id = ?', EnfermedadesRDB.data.remoteData[i].id);
             if (EnfermedadLDB[0] != null) {
                 if (new Date(EnfermedadesRDB.data.remoteData[i].lastUpdate) > new Date(EnfermedadLDB[0].lastUpdate)) {
@@ -328,7 +303,6 @@ export default SincroniceData = async () => {
 
         // Citas
         for (let i = 0; i < CitasRDB.data.remoteData.length; i++) {
-            //console.log('SELECT Id, lastUpdate FROM Cita WHERE Id = ' + CitasRDB.data.remoteData[i].id);
             const CitaLDB = await getDataSQL('SELECT Id, lastUpdate FROM Cita WHERE Id = ?', CitasRDB.data.remoteData[i].id);
             if (CitaLDB[0] != null) {
                 if (new Date(CitasRDB.data.remoteData[i].lastUpdate) > new Date(CitaLDB[0].lastUpdate)) {
@@ -381,7 +355,3 @@ export default SincroniceData = async () => {
         console.error('Error al realizar la comparación:', error.config);
     }
 };
-
-
-
-

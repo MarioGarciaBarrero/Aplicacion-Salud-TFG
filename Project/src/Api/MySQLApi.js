@@ -2,7 +2,6 @@ require('dotenv').config({ path: '../../.env' });
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
-const PORT = process.env.DB_PORT;
 app.use(express.json());
 
 // Configura la conexión a la base de datos
@@ -57,7 +56,6 @@ app.post('/compare-update', (req, res) => {
     // }
 
     const remoteData = results;
-    const { lastUpdate: lastUpdateRemote } = remoteData;
 
     return res.status(200).json({
       remoteData
