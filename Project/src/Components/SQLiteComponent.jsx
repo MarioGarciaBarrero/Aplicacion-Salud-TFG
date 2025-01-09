@@ -49,7 +49,7 @@ export const insertDataSQL = async (sqlQuery, params = []) => {
 //db.runAsync('INSERT INTO Centros (name, description, latitude, longitude, type, privado, duracionCita, horaParada, horaVuelta, horaInicio, horaFin) VALUES (?,?,?,?,?,?)', 'Farmacia Mostoles', 'Horario: 9:00-23:00', '40.328612797903034', '-3.870639229967378', 'Farmacia', false);
 
 //AÑADIR NUEVOS CAMPOS A UNA TABLA
-//db.runAsync('ALTER TABLE Usuario ADD COLUMN lastUpdate DATETIME');
+//db.runAsync('ALTER TABLE Usuario ADD COLUMN lastConnection DATETIME');
 //db.runAsync('UPDATE NoticiasSalud SET lastUpdate = ?', '2024-10-01T12:00:00');
 //getDataSQLShowResult('SELECT * FROM Centros');
 
@@ -63,7 +63,7 @@ export const insertDataSQL = async (sqlQuery, params = []) => {
 
 //BORRAR REGISTROS DE UNA TABLA
 //db.runAsync('DELETE FROM NoticiasSalud WHERE id > 2');
-getDataSQLShowResult('SELECT * FROM Centros'); 
+getDataSQLShowResult('SELECT * FROM Usuario'); 
 //getDataSQLShowResult('SELECT * FROM Cita'); 
 
 // //INSERTAR TABLAS

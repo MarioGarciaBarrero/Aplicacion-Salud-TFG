@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getDataSQL, getDataSQLShowResult, insertDataSQL } from '../Components/SQLiteComponent.jsx';
 import bcrypt from 'react-native-bcrypt';
 import { AuthContext } from '../Components/AuthContext'
+import moment from 'moment';
 
 const LogInRegister = ({navigation}) => {
     const { setUserId } = useContext(AuthContext); // Obtener el setter de userId
@@ -84,11 +85,13 @@ const LogInRegister = ({navigation}) => {
                 Alert.alert('Login', 'Combinación usuario contraseña incorrecto');
             }else{
                 setUserId(user[0].id);
+                const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                insertDataSQL('UPDATE Usuario SET lastConnection = ? WHERE Id = ' + user[0].id, [currentDateTime]);
                 navigation.navigate('Home', user);
             }
         }else{
 
-            Alert.alert('Login', 'No se ha encontrado al usuario');
+           Alert.alert('Login', 'No se ha encontrado al usuario');
         }
 
 

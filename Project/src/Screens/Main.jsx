@@ -7,6 +7,7 @@ import MapComponent from '../Components/MapComponent';
 import SincroniceData from '../Components/SincroniceData';
 import { AuthContext } from '../Components/AuthContext'
 import { getDataSQL } from '../Components/SQLiteComponent.jsx';
+import ChatBot from '../Components/ChatBot.jsx';
 
 const Main = ({navigation}) => {
   const { userId } = useContext(AuthContext); // Obtener el userId
@@ -107,6 +108,8 @@ const Main = ({navigation}) => {
             <Text style={styles.secondaryButtonText}>Información sanitaria personalizada</Text>
             </TouchableOpacity>
         </View>
+      
+        <ChatBot />
       
       <View style={styles.title}>
           <Text style={styles.logoText}>Centros cercanos</Text>
